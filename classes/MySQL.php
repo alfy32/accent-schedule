@@ -13,7 +13,7 @@ $dbpass = $_ENV['OPENSHIFT_MYSQL_DB_PASSWORD'];
 $dbname = $_ENV['OPENSHIFT_APP_NAME'];
 $dbport = $_ENV['OPENSHIFT_MYSQL_DB_PORT'];
 
-echo exec(" mysqldump  -u'adminCK9mtjG' -p'BwfX61ptw_U5' accent > db.sql");
+echo exec(" mysqldump  -u'$dbuser' -p'$dbpass' $dbname > db.sql");
 
 // Height for the wrap around client names
 define(MAX_HEIGHT, 3);

@@ -1,0 +1,2 @@
+#!/bin/bash
+curl -L http://accent-samachr.rhcloud.com/database/index.php >> ${OPENSHIFT_PHP_LOG_DIR}/databaseBackupLog.log
