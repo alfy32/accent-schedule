@@ -89,8 +89,8 @@
 		$state = htmlentities($_POST['state']);
 		$zip = htmlentities($_POST['zip']);
         
-		// ACCEPT
-		if ($_POST['accept'] == 'Create') {
+		// UPDATE
+		if ($_POST['accept'] == 'Update') {
 			$result = $conn->query("
 				UPDATE employee
 				SET firstName='$firstName', lastName='$lastName', 
@@ -99,7 +99,7 @@
 				WHERE id=$employeeId
 			");
 		}
-		// UPDATE
+		// CREATE
 		else {
 			$result = $conn->query("
 				INSERT INTO employee (firstName, lastName, phone, address, city, state, zip)
