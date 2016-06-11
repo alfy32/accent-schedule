@@ -105,6 +105,7 @@
 				INSERT INTO employee (firstName, lastName, phone, address, city, state, zip)
 				VALUES ('$firstName', '$lastName', '$phone', '$address', '$city', '$state', '$zip')
 			");
+			$employeeId = $conn->insert_id;
 		}
 
 		if($result)
