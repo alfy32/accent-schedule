@@ -88,15 +88,25 @@
 		$city = htmlentities($_POST['city']);
 		$state = htmlentities($_POST['state']);
 		$zip = htmlentities($_POST['zip']);
-		
-		$result = $conn->query("
-			UPDATE employee
-			SET firstName='$firstName', lastName='$lastName', 
-				phone='$phone', address='$address',
-				city='$city', state='$state', zip='$zip'
-			WHERE id=$employeeId
-		");
-		
+        
+		// ACCEPT
+		if ($_POST['accept'] == 'Create') {
+			$result = $conn->query("
+				UPDATE employee
+				SET firstName='$firstName', lastName='$lastName', 
+					phone='$phone', address='$address',
+					city='$city', state='$state', zip='$zip'
+				WHERE id=$employeeId
+			");
+		}
+		// UPDATE
+		else {
+			$result = $conn->query("
+				INSERT INTO employee (firstName, lastName, phone, address, city, state, zip)
+				VALUES ('$firstName', '$lastName', '$phone', '$address', '$city', '$state', '$zip')
+			");
+		}
+
 		if($result)
 			$message = "$firstName's info was updated successfully.";
 		else
@@ -246,7 +256,7 @@
 					</table>
 				</fieldset>
 				<input type="submit" name="cancel" value="Cancel" />
-				<input type="submit" name="accept" value="Update" />
+				<input type="submit" name="accept" value="<?php echo isset($employeeId) ? 'Update' : 'Create'?>" />
 				</form>
 			</div>
 			<div style="clear:both"></div>
