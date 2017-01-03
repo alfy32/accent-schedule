@@ -23,8 +23,53 @@ ini_set('display_errors', 1);
 		<link rel="stylesheet" type="text/css" href="css/footer.css">
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="js/schedule.js"></script>
+		<script>
+			function login() {
+				if(document.getElementById('pass').value == "2010") {
+					document.getElementById('overlay').style.display = "none"
+				}
+			}
+		</script>
+
+		<style>
+		div.backgrounddiv {
+			opacity:    0.9;
+			background: #333;
+			width:      100%;
+			height:     100%;
+			z-index:    10000;
+			top:        0;
+			left:       0;
+			position:   fixed;
+		}
+
+		#pass {
+			border-radius:3px;
+			padding: 5px;
+			width: 125px;
+			height: 30px;
+			display:block;
+			margin:auto;
+			margin-top:300px;
+		}
+
+		#submit {
+			border-radius:3px;
+			width: 125px;
+			height: 30px;
+			display:block;
+			margin:auto;
+			margin-top: 10px;
+			cursor: pointer;
+		}
+
+		</style>
 	</head>
 	<body>
+		<div id="overlay" class="backgrounddiv">
+			<input id="pass" type="password" autofocus>
+			<button id="submit" onclick="login()">Submit</button>
+		</div>
 		<?php require_once 'includes/editAppointment.php'; ?>
 		<header>
 			<form class="headerForm" action="" method="post">
