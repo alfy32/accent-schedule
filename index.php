@@ -24,6 +24,7 @@ ini_set('display_errors', 1);
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="js/schedule.js"></script>
 		<script>
+
 			function login() {
 				if(document.getElementById('pass').value == "2010") {
 					document.getElementById('overlay').style.display = "none"
@@ -66,10 +67,13 @@ ini_set('display_errors', 1);
 		</style>
 	</head>
 	<body>
-		<div id="overlay" class="backgrounddiv">
-			<input id="pass" type="password" autofocus>
-			<button id="submit" onclick="login()">Submit</button>
-		</div>
+		<?php if ($_SERVER['REQUEST_METHOD'] === 'GET') { ?>
+			<div id="overlay" class="backgrounddiv">
+				<input id="pass" type="password" autofocus>
+				<button id="submit" onclick="login()">Submit</button>
+			</div>
+		<?php } ?>
+
 		<?php require_once 'includes/editAppointment.php'; ?>
 		<header>
 			<form class="headerForm" action="" method="post">
