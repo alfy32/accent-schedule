@@ -27,7 +27,9 @@ ini_set('display_errors', 1);
 
 			function login() {
 				if(document.getElementById('pass').value == "2010") {
-					document.getElementById('overlay').style.display = "none"
+					document.getElementById('overlay').style.display = "none";
+				} else {
+					document.getElementById('pass').value = "";
 				}
 			}
 		</script>
@@ -69,8 +71,10 @@ ini_set('display_errors', 1);
 	<body>
 		<?php if ($_SERVER['REQUEST_METHOD'] === 'GET') { ?>
 			<div id="overlay" class="backgrounddiv">
-				<input id="pass" type="password" autofocus>
-				<button id="submit" onclick="login()">Submit</button>
+				<form action="javascript:login();">
+					<input id="pass" type="password" autofocus>
+					<button id="submit" onclick="login()">Submit</button>
+				</form>
 			</div>
 		<?php } ?>
 
