@@ -50,8 +50,9 @@
 		DELETE FROM employee
 		WHERE id='$employeeId'
 		");
-
-		echo "Employee $employeeId deleted successfully. <a href='/employee.php'>Refresh</a> to see the changes."
+?>
+		Employee deleted successfully. <a href="/employee.php">Refresh</a> to see the changes.
+<?php
 	}
 
 	/// ON CHOOSE EMPLOYEE ////
@@ -183,7 +184,7 @@
 			<div class="left">
 				<fieldset><legend>Choose Employee</legend>
 					<form action="employee.php" method="POST">
-						<input type="submit" name="deleteEmployee" value="Choose Employee" />
+						<input type="submit" name="deleteEmployee" value="Delete Employee" />
 						<select tabindex="1" name="selectEmployeeId" size='2' ondblclick="submit()">
 						<?php $mysql->getEmployeeOptions(); ?>
 						</select> <br />
