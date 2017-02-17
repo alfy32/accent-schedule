@@ -1,22 +1,22 @@
 <?php //print_r($_POST);
 
-	require_once 'classes/Authenticate.php';	
-	require_once 'classes/MySQL.php';	
-	
+	require_once 'classes/Authenticate.php';
+	require_once 'classes/MySQL.php';
+
 	//// LOGIN SETUP ////
 	$authentication = new Authenticate();
 	$authentication->confirmMember();
-	
+
 	$mysql = new MySQL();
-	
+
 	$conn = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
-	if($conn->connect_error) 
+	if($conn->connect_error)
 		die("<h3>Database Error: $conn->connect_error</h3>");
-	
+
 	$firstName = '';
 	$lastName = '';
 	$phone = '';
-	
+
 	$notIn['Monday'] = '';
 	$notIn['Tuesday'] = '';
 	$notIn['Wednesday'] = '';
@@ -42,18 +42,30 @@
 	$end['Friday'] = '';
 	$end['Saturday'] = '';
 
-	/// ON CHOOSE EMPLOYEE ////
-	if(isset($_POST['selectEmployeeId'])){ //echo "<pre>"; print_r($_POST); echo "</pre>";
-		
+	/// ON DELETE EMPLOYEE ////
+	if(isset($_POST['deleteEmployee']) && isset($_POST['selectEmployeeId'])){
 		$employeeId = htmlentities($_POST['selectEmployeeId']);
-		
+
 		$result = $conn->query("
-			SELECT * FROM employee 
+		DELETE FROM employee
+		WHERE id='$employeeId'
+		");
+
+		echo "Employee $employeeId deleted successfully. <a href='/employee.php'>Refresh</a> to see the changes."
+	}
+
+	/// ON CHOOSE EMPLOYEE ////
+	if(isset($_POST['chooseEmployee']) && isset($_POST['selectEmployeeId'])){
+
+		$employeeId = htmlentities($_POST['selectEmployeeId']);
+
+		$result = $conn->query("
+			SELECT * FROM employee
 			WHERE id='$employeeId'
 		");
-		
+
 		$row = $result->fetch_assoc();
-		
+
 		$firstName = $row['firstName'];
 		$lastName = $row['lastName'];
 		$phone = $row['phone'];
@@ -61,13 +73,13 @@
 		$city = $row['city'];
 		$state = $row['state'];
 		$zip = $row['zip'];
-		
-		
+
+
 		$result = $conn->query("
-			SELECT * FROM employeeSchedule 
+			SELECT * FROM employeeSchedule
 			WHERE employeeId='$employeeId'
 		");
-		
+
 		while($row = $result->fetch_assoc()) {
 			$start[ucfirst($row['dayOfWeek'])] = $row['dayStart'];
 			$end[ucfirst($row['dayOfWeek'])] = $row['dayEnd'];
@@ -76,10 +88,10 @@
 				$notIn[ucfirst($row['dayOfWeek'])] = 'checked';
 		}
 	}
-	
+
 	//// ON ACCEPT CHANGES ////
 	if(isset($_POST['accept'])) { //echo "<pre>"; print_r($_POST); echo "</pre>";
-		
+
 		$employeeId = htmlentities($_POST['employeeId']);
 		$firstName = htmlentities($_POST['firstName']);
 		$lastName = htmlentities($_POST['lastName']);
@@ -88,12 +100,12 @@
 		$city = htmlentities($_POST['city']);
 		$state = htmlentities($_POST['state']);
 		$zip = htmlentities($_POST['zip']);
-        
+
 		// UPDATE
 		if ($_POST['accept'] == 'Update') {
 			$result = $conn->query("
 				UPDATE employee
-				SET firstName='$firstName', lastName='$lastName', 
+				SET firstName='$firstName', lastName='$lastName',
 					phone='$phone', address='$address',
 					city='$city', state='$state', zip='$zip'
 				WHERE id=$employeeId
@@ -112,22 +124,22 @@
 			$message = "$firstName's info was updated successfully.";
 		else
 			$message = "Database update fail";
-		
+
 		$notIn = $_POST['notIn'];
 		$col = $_POST['col'];
 		$start = $_POST['start'];
 		$end = $_POST['end'];
-		
+
 		foreach($col as $day=>$val) {
 			$col[$day] = htmlentities($col[$day]);
 			$start[$day] = htmlentities($start[$day]);
 			$end[$day] = htmlentities($end[$day]);
-			
+
 			if(isset($notIn[$day])){
 				$col[$day] = -$employeeId;
 				$notIn[$day] = 'checked';
 			}
-			
+
 			$result = array();
 			$result[$day] = $conn->query("
 				INSERT INTO employeeSchedule (employeeId, scheduleCol, dayStart, dayEnd, dayOfWeek)
@@ -135,14 +147,14 @@
 			");
 			$result[$day] = $conn->query("
 				UPDATE employeeSchedule
-				SET scheduleCol=$col[$day], 
+				SET scheduleCol=$col[$day],
 					dayStart='$start[$day]', dayEnd='$end[$day]'
 				WHERE dayOfWeek='$day'
 				AND employeeId=$employeeId
 			");
-		}		
-	}	
-	
+		}
+	}
+
  ?>
  <!DOCTYPE html>
 <html lang='en'>
@@ -171,6 +183,7 @@
 			<div class="left">
 				<fieldset><legend>Choose Employee</legend>
 					<form action="employee.php" method="POST">
+						<input type="submit" name="deleteEmployee" value="Choose Employee" />
 						<select tabindex="1" name="selectEmployeeId" size='2' ondblclick="submit()">
 						<?php $mysql->getEmployeeOptions(); ?>
 						</select> <br />
