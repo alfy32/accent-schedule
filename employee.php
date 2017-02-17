@@ -184,7 +184,7 @@
 			<div class="left">
 				<fieldset><legend>Choose Employee</legend>
 					<form action="employee.php" method="POST">
-						<input type="submit" name="deleteEmployee" value="Delete Selected Employee" /> <br />
+						<input type="submit" name="deleteEmployee" value="Delete Selected Employee" style="display:none;"/> <br />
 						<select tabindex="1" name="selectEmployeeId" size='2' ondblclick="submit()">
 						<?php $mysql->getEmployeeOptions(); ?>
 						</select> <br />
